@@ -88,92 +88,90 @@ const MovieHitsListItem = (props) => {
 };
 
 const SearchKitView = ({ data }) => {
-  const { url } = data;
+  const { url = 'http://localhost:9200' } = data;
   const searchkit = React.useMemo(() => {
     return new SearchkitManager(url);
   }, [url]);
   return (
     <div>
       <SearchkitProvider searchkit={searchkit}>
-        <div>SearchKit View {url}</div>
         <Layout>
-          <TopBar>
-            <div className="my-logo">Searchkit Acme co</div>
-            <SearchBox
-              autofocus={true}
-              searchOnChange={true}
-              prefixQueryFields={[
-                'actors^1',
-                'type^2',
-                'languages',
-                'title^10',
-              ]}
-            />
-          </TopBar>
+          {/* <TopBar></TopBar> */}
 
           <LayoutBody>
             <SideBar>
-              <HierarchicalMenuFilter
-                fields={['type.raw', 'genres.raw']}
-                title="Categories"
-                id="categories"
-              />
-              <DynamicRangeFilter
-                field="metaScore"
-                id="metascore"
-                title="Metascore"
-                rangeFormatter={(count) => count + '*'}
-              />
-              <RangeFilter
-                min={0}
-                max={10}
-                field="imdbRating"
-                id="imdbRating"
-                title="IMDB Rating"
-                showHistogram={true}
-              />
-              <InputFilter
-                id="writers"
-                searchThrottleTime={500}
-                title="Writers"
-                placeholder="Search writers"
-                searchOnChange={true}
-                queryFields={['writers']}
-              />
-              <RefinementListFilter
-                id="actors"
-                title="Actors"
-                field="actors.raw"
-                size={10}
-              />
-              <RefinementListFilter
-                id="writersFacets"
-                translations={{ 'facets.view_more': 'View more writers' }}
-                title="Writers"
-                field="writers.raw"
-                operator="OR"
-                size={10}
-              />
-              <RefinementListFilter
-                id="countries"
-                title="Countries"
-                field="countries.raw"
-                operator="OR"
-                size={10}
-              />
-              <NumericRefinementListFilter
-                id="runtimeMinutes"
-                title="Length"
-                field="runtimeMinutes"
-                options={[
-                  { title: 'All' },
-                  { title: 'up to 20', from: 0, to: 20 },
-                  { title: '21 to 60', from: 21, to: 60 },
-                  { title: '60 or more', from: 61, to: 1000 },
-                ]}
-              />
+              {/* <HierarchicalMenuFilter */}
+              {/*   fields={['type.raw', 'genres.raw']} */}
+              {/*   title="Categories" */}
+              {/*   id="categories" */}
+              {/* /> */}
+              {/* <DynamicRangeFilter */}
+              {/*   field="metaScore" */}
+              {/*   id="metascore" */}
+              {/*   title="Metascore" */}
+              {/*   rangeFormatter={(count) => count + '*'} */}
+              {/* /> */}
+              {/* <RangeFilter */}
+              {/*   min={0} */}
+              {/*   max={10} */}
+              {/*   field="imdbRating" */}
+              {/*   id="imdbRating" */}
+              {/*   title="IMDB Rating" */}
+              {/*   showHistogram={true} */}
+              {/* /> */}
+              {/* <InputFilter */}
+              {/*   id="writers" */}
+              {/*   searchThrottleTime={500} */}
+              {/*   title="Writers" */}
+              {/*   placeholder="Search writers" */}
+              {/*   searchOnChange={true} */}
+              {/*   queryFields={['writers']} */}
+              {/* /> */}
+              {/* <RefinementListFilter */}
+              {/*   id="actors" */}
+              {/*   title="Actors" */}
+              {/*   field="actors.raw" */}
+              {/*   size={10} */}
+              {/* /> */}
+              {/* <RefinementListFilter */}
+              {/*   id="writersFacets" */}
+              {/*   translations={{ 'facets.view_more': 'View more writers' }} */}
+              {/*   title="Writers" */}
+              {/*   field="writers.raw" */}
+              {/*   operator="OR" */}
+              {/*   size={10} */}
+              {/* /> */}
+              {/* <RefinementListFilter */}
+              {/*   id="countries" */}
+              {/*   title="Countries" */}
+              {/*   field="countries.raw" */}
+              {/*   operator="OR" */}
+              {/*   size={10} */}
+              {/* /> */}
+              {/* <NumericRefinementListFilter */}
+              {/*   id="runtimeMinutes" */}
+              {/*   title="Length" */}
+              {/*   field="runtimeMinutes" */}
+              {/*   options={[ */}
+              {/*     { title: 'All' }, */}
+              {/*     { title: 'up to 20', from: 0, to: 20 }, */}
+              {/*     { title: '21 to 60', from: 21, to: 60 }, */}
+              {/*     { title: '60 or more', from: 61, to: 1000 }, */}
+              {/*   ]} */}
+              {/* /> */}
             </SideBar>
             <LayoutResults>
+              {/* <div className="my-logo">Searchkit Acme co</div> */}
+              <SearchBox
+                autofocus={true}
+                searchOnChange={true}
+                prefixQueryFields={[
+                  'actors^1',
+                  'type^2',
+                  'languages',
+                  'title^10',
+                ]}
+              />
               <ActionBar>
                 <ActionBarRow>
                   <HitsStats
