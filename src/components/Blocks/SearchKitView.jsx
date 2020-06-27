@@ -166,12 +166,7 @@ const SearchKitView = ({ data }) => {
               <SearchBox
                 autofocus={true}
                 searchOnChange={true}
-                prefixQueryFields={[
-                  'actors^1',
-                  'type^2',
-                  'languages',
-                  'title^10',
-                ]}
+                prefixQueryFields={[]}
               />
               <ActionBar>
                 <ActionBarRow>
@@ -185,13 +180,13 @@ const SearchKitView = ({ data }) => {
                     options={[
                       { label: 'Relevance', field: '_score', order: 'desc' },
                       {
-                        label: 'Latest Releases',
-                        field: 'released',
+                        label: 'Latest Modifications',
+                        field: 'modified',
                         order: 'desc',
                       },
                       {
-                        label: 'Earliest Releases',
-                        field: 'released',
+                        label: 'Earliest Modifications',
+                        field: 'modified',
                         order: 'asc',
                       },
                     ]}

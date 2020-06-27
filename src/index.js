@@ -42,7 +42,7 @@ export default function applyConfig(config) {
       index: 'esbootstrapdata-climate_2020-04-17_09:11:02',
       maxSockets: 500, // defaults to 1000
       queryProcessor: function (query, req, res) {
-        console.log(query);
+        console.log('query', query);
         return query;
       },
     });
@@ -53,6 +53,7 @@ export default function applyConfig(config) {
 
     config.settings.expressMiddleware = [
       ...(config.settings.expressMiddleware || []),
+      express.json(),
       middleware,
     ];
   }
