@@ -49,13 +49,11 @@ export default function applyConfig(config) {
 
     const middleware = express.Router();
     middleware.use('/_es', searchkitRouter);
+    middleware.id = 'searchkit';
 
     config.settings.expressMiddleware = [
       ...(config.settings.expressMiddleware || []),
-      {
-        name: 'searchkit',
-        middleware,
-      },
+      middleware,
     ];
   }
 
