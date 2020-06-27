@@ -26,7 +26,7 @@ import {
   ActionBarRow,
   SideBar,
 } from 'searchkit';
-import './theme';
+import './theme.scss';
 
 const MovieHitsGridItem = (props) => {
   const { bemBlocks, result } = props;
@@ -128,12 +128,41 @@ const SearchKitView = ({ data }) => {
               {/*   searchOnChange={true} */}
               {/*   queryFields={['writers']} */}
               {/* /> */}
-              {/* <RefinementListFilter */}
-              {/*   id="actors" */}
-              {/*   title="Actors" */}
-              {/*   field="actors.raw" */}
-              {/*   size={10} */}
-              {/* /> */}
+              <RefinementListFilter
+                id="typeOfData"
+                title="Portal type"
+                field="typeOfData"
+                size={10}
+              />
+
+              <RefinementListFilter
+                id="sectors"
+                title="Adaptation sectors"
+                field="sectors"
+                size={10}
+              />
+
+              <RefinementListFilter
+                id="climateImpacts"
+                title="Climate impacts"
+                field="climate_impacts"
+                size={10}
+              />
+
+              <RefinementListFilter
+                id="transnationalRegions"
+                title="Transnational Regions"
+                field="spatial"
+                size={10}
+              />
+
+              <RefinementListFilter
+                id="adaptationElements"
+                title="Adaptation Elements"
+                field="elements"
+                size={10}
+              />
+
               {/* <RefinementListFilter */}
               {/*   id="writersFacets" */}
               {/*   translations={{ 'facets.view_more': 'View more writers' }} */}

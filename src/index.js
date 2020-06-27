@@ -1,19 +1,6 @@
 import { SearchKitView, SearchKitEdit } from './components';
 import codeSVG from '@plone/volto/icons/code.svg';
 
-// // Allow pluggability with `config.settings.serverRoutes`
-// function handleAll(req, res, next) {
-//   let found = false;
-//   (settings.expressMiddleware || []).forEach((handler) => {
-//     if (found) return;
-//     if (handler[0](req)) {
-//       found = true;
-//       handler[1](req, res, next);
-//     }
-//   });
-//   if (!found) return next();
-// }
-
 export default function applyConfig(config) {
   config.blocks.blocksConfig.searchkit = {
     id: 'searchkit',
