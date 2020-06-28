@@ -10,8 +10,9 @@ export const SearchkitBlockSchema = {
   ],
 
   properties: {
-    url: {
-      title: 'ES URL',
+    es_index: {
+      title: 'ES Index',
+      description: '',
     },
   },
 

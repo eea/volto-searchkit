@@ -6,11 +6,11 @@ export default function applyConfig(config) {
     id: 'searchkit',
     title: 'Searchkit',
     icon: codeSVG,
-    group: 'text',
+    group: 'common',
     view: SearchKitView,
     edit: SearchKitEdit,
     restricted: false,
-    mostUsed: true,
+    mostUsed: false,
     blockHasOwnFocusManagement: false,
     sidebarTab: 1,
     security: {
@@ -21,6 +21,7 @@ export default function applyConfig(config) {
 
   config.widgets.widget.elasticsearch_select_index = SelectIndexWidget;
   config.settings.searchkit = {
+    ...config.settings.searchkit,
     esProxyWhitelist: {
       GET: ['^/_aliases', '^/_all'],
       POST: ['^/_search', /^\/[\w\d.-]+\/_search/],
@@ -28,8 +29,10 @@ export default function applyConfig(config) {
   };
 
   if (__SERVER__) {
-    const installServerExtension = require('./server').default;
-    config = installServerExtension(config);
+    // TODO: develop this further to support multiple proxied ES
+    const target = process.env.ELASTIC_URL || 'http://localhost:9200';
+    const esProxyMiddleware = require('./server').default;
+    config.settings.expressMiddleware = [esProxyMiddleware(target)];
   }
 
   return config;
