@@ -1,4 +1,4 @@
-const SearchKitBlockSchema = {
+export const SearchkitBlockSchema = {
   title: 'Searchkit Block',
 
   fieldsets: [
@@ -17,5 +17,3 @@ const SearchKitBlockSchema = {
 
   required: ['url'],
 };
-
-export default SearchKitBlockSchema;

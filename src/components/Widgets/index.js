@@ -1,0 +1,1 @@
+export SelectIndexWidget from './SelectIndex';
