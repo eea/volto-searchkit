@@ -25,6 +25,8 @@ import {
   ActionBar,
   ActionBarRow,
   SideBar,
+  MenuFilter,
+  FacetFilter,
 } from 'searchkit';
 import './theme.scss';
 
@@ -128,11 +130,11 @@ const SearchKitView = ({ data }) => {
               {/*   searchOnChange={true} */}
               {/*   queryFields={['writers']} */}
               {/* /> */}
-              <RefinementListFilter
+              <MenuFilter
                 id="typeOfData"
                 title="Portal type"
                 field="typeOfData"
-                size={10}
+                size={1}
               />
 
               <RefinementListFilter

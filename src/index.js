@@ -21,12 +21,14 @@ export default function applyConfig(config) {
 
   if (__SERVER__) {
     const express = require('express');
+    const fetch = require('node-fetch');
     const SearchkitExpress = require('searchkit-express');
+
     const host = process.env.ELASTIC_URL || 'http://localhost:9200';
 
     const searchkitRouter = SearchkitExpress.createRouter({
       host,
-      index: 'esbootstrapdata-climate_2020-04-17_09:11:02',
+      index: 'esbootstrapdata-climate',
       maxSockets: 500, // defaults to 1000
       queryProcessor: function (query, req, res) {
         console.log('query', query);
@@ -34,8 +36,22 @@ export default function applyConfig(config) {
       },
     });
 
+    searchkitRouter.get('/_aliases', (req, res) => {
+      const url = `${host}/_aliases`;
+      fetch(url, {
+        method: req.method,
+      })
+        .catch((error) => {
+          if (error) {
+            // console.error('error: ' + error);
+            res.send('error');
+          }
+        })
+        .then((result) => result.body.pipe(res));
+    });
+
     const middleware = express.Router();
-    middleware.use('/_es', searchkitRouter);
+    middleware.use('/', searchkitRouter);
     middleware.id = 'searchkit';
 
     config.settings.expressMiddleware = [
