@@ -1,5 +1,6 @@
 import { SearchKitView, SearchKitEdit, SelectIndexWidget } from './components';
 import codeSVG from '@plone/volto/icons/code.svg';
+import { es_server } from './reducers';
 
 export default function applyConfig(config) {
   config.blocks.blocksConfig.searchkit = {
@@ -26,6 +27,11 @@ export default function applyConfig(config) {
       GET: ['^/_aliases', '^/_all'],
       POST: ['^/_search', /^\/[\w\d.-]+\/_search/],
     },
+  };
+
+  config.addonReducers = {
+    ...config.addonReducers,
+    es_server,
   };
 
   if (__SERVER__) {

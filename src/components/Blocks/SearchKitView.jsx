@@ -1,5 +1,6 @@
 import extend from 'lodash/extend';
 import React from 'react';
+import { settings } from '~/config';
 import {
   SearchkitManager,
   SearchkitProvider,
@@ -91,7 +92,10 @@ const MovieHitsListItem = (props) => {
 };
 
 const SearchKitView = ({ data }) => {
-  const { url = 'http://localhost:9200' } = data;
+  const { es_index = {} } = data;
+  const { host = 'http://localhost:3000', indexName = '' } = es_index;
+  const url = `${host}/${indexName}`;
+  console.log('using es index ', url);
   const searchkit = React.useMemo(() => {
     return new SearchkitManager(url);
   }, [url]);
@@ -130,11 +134,12 @@ const SearchKitView = ({ data }) => {
               {/*   searchOnChange={true} */}
               {/*   queryFields={['writers']} */}
               {/* /> */}
+
               <MenuFilter
                 id="typeOfData"
                 title="Portal type"
                 field="typeOfData"
-                size={1}
+                size={2}
               />
 
               <RefinementListFilter
