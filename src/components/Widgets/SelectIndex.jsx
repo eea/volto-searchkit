@@ -12,8 +12,6 @@ import { FormFieldWrapper, TextWidget } from '@plone/volto/components';
 import { getIndexes } from '../../actions';
 import { FormContext } from '../Blocks/Form';
 
-// , find, isBoolean, isObject, intersection
-
 const Select = loadable(() => import('react-select'));
 
 const messages = {
@@ -24,7 +22,6 @@ const messages = {
 };
 
 const SelectIndex = (props) => {
-  console.log('props values', props);
   const {
     onEdit,
     id,
@@ -48,10 +45,7 @@ const SelectIndex = (props) => {
   //     getIndexes(host);
   //   }
   // }, [host, es_indexes, getIndexes, was]);
-  console.log('indexName', value.indexName);
-
-  const { form } = React.useContext(FormContext);
-  console.log('form', form);
+  // console.log('indexName', value.indexName);
 
   return (
     <div id={`field-${id}`}>
@@ -112,11 +106,10 @@ export default connect(
   (state, props) => {
     const host = props.value?.host;
     const es_indexes = state.es_server[host] || {};
-    const { items = [] } = es_indexes;
-    console.log('es_indexes', es_indexes);
+    const { items = {} } = es_indexes;
     return {
       es_indexes,
-      choices: items.map((l) => [l, l]),
+      choices: Object.keys(items).map((l) => [l, l]),
     };
   },
   { getIndexes },

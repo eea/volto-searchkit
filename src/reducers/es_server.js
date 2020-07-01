@@ -15,12 +15,16 @@ export default function es_server(state = {}, action) {
       };
     case `${ELASTICSEARCH_INDEXES}_SUCCESS`:
       const { result = {} } = action;
-      let indexes = [];
+      let indexes = {};
       for (let k in result) {
-        indexes.push(k);
         const sub = result[k];
+        // console.log('sub', sub);
+        indexes[k] = { mappings: sub.mappings, aliases: sub.aliases };
         const { aliases = {} } = sub;
-        indexes = indexes.concat(Object.keys(aliases));
+        for (let a in aliases) {
+          indexes[a] = { mappings: sub.mappings };
+        }
+        // indexes = indexes.concat(Object.keys(aliases));
       }
       return {
         ...state,

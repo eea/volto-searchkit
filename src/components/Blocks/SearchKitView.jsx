@@ -1,6 +1,7 @@
+import * as _ from 'lodash';
+import decorateComponentWithProps from 'decorate-component-with-props';
 import extend from 'lodash/extend';
 import React from 'react';
-import { settings } from '~/config';
 import {
   SearchkitManager,
   SearchkitProvider,
@@ -29,38 +30,47 @@ import {
   MenuFilter,
   FacetFilter,
 } from 'searchkit';
-import './theme.scss';
 
-const MovieHitsGridItem = (props) => {
+import tableSVG from '@plone/volto/icons/table.svg';
+import { Icon } from '@plone/volto/components';
+import './theme.scss';
+import { Table } from 'semantic-ui-react';
+
+const GenericGridItem = (props) => {
+  console.log('griditem props', props);
   const { bemBlocks, result } = props;
-  let url = 'http://www.imdb.com/title/' + result._source.imdbId;
   const source = extend({}, result._source, result.highlight);
+  const fieldTitle = props.data?.tile_title || 'title';
+  const fieldDescription = props.data?.tile_description || 'description';
+  const fieldImage = props.data?.tile_image || 'depiction';
+  const fieldUrl = props.data?.tile_url || 'about';
+  // const title = source[titleField];
   return (
     <div
       className={bemBlocks.item().mix(bemBlocks.container('item'))}
       data-qa="hit"
     >
-      <a href={url} target="_blank" rel="noreferrer">
-        {/* <img */}
-        {/*   data-qa="poster" */}
-        {/*   alt="presentation" */}
-        {/*   className={bemBlocks.item('poster')} */}
-        {/*   src={result._source.poster} */}
-        {/*   width="170" */}
-        {/*   height="240" */}
-        {/* /> */}
-        <div
-          data-qa="title"
-          className={bemBlocks.item('title')}
-          dangerouslySetInnerHTML={{ __html: source.title }}
-        ></div>
+      <a href={source[fieldUrl]} target="_blank" rel="noreferrer">
+        {/* {source[fieldImage] && ( */}
+        {/*   <img */}
+        {/*     data-qa="poster" */}
+        {/*     alt="presentation" */}
+        {/*     className={bemBlocks.item('poster')} */}
+        {/*     src={source[fieldImage]} */}
+        {/*     width="170" */}
+        {/*     height="240" */}
+        {/*   /> */}
+        {/* )} */}
+        <div data-qa="title" className={bemBlocks.item('title')}>
+          {source[fieldTitle]}
+        </div>
       </a>
     </div>
   );
 };
 
-const MovieHitsListItem = (props) => {
-  console.log('item', props);
+const GenericListItem = (props) => {
+  // console.log('item', props);
   const { bemBlocks, result } = props;
   let url = 'http://www.imdb.com/title/' + result._source.imdbId;
   const source = extend({}, result._source, result.highlight);
@@ -79,15 +89,35 @@ const MovieHitsListItem = (props) => {
             dangerouslySetInnerHTML={{ __html: source.title }}
           ></h2>
         </a>
-        <h3 className={bemBlocks.item('subtitle')}>
-          Released in {source.year}, rated {source.imdbRating}/10
-        </h3>
-        <div
-          className={bemBlocks.item('text')}
-          dangerouslySetInnerHTML={{ __html: source.plot }}
-        ></div>
+        {/* <h3 className={bemBlocks.item('subtitle')}> */}
+        {/*   Released in {source.year}, rated {source.imdbRating}/10 */}
+        {/* </h3> */}
+        {/* <div */}
+        {/*   className={bemBlocks.item('text')} */}
+        {/*   dangerouslySetInnerHTML={{ __html: source.plot }} */}
+        {/* ></div> */}
       </div>
     </div>
+  );
+};
+
+const GenericTable = (props) => {
+  const fieldTitle = props.data?.tile_title || 'title';
+  const fieldUrl = props.data?.tile_url || 'about';
+  return (
+    <Table celled>
+      {(props.hits || []).map((item) => {
+        const source = extend({}, item._source, item.highlight);
+        // console.log('item', item);
+        return (
+          <tr>
+            <td>
+              <a href={source[fieldUrl]}>{source[fieldTitle]}</a>
+            </td>
+          </tr>
+        );
+      })}
+    </Table>
   );
 };
 
@@ -95,10 +125,11 @@ const SearchKitView = ({ data }) => {
   const { es_index = {} } = data;
   const { host = 'http://localhost:3000', indexName = '' } = es_index;
   const url = `${host}/${indexName}`;
-  console.log('using es index ', url);
+  // console.log('using es index ', url);
   const searchkit = React.useMemo(() => {
     return new SearchkitManager(url);
   }, [url]);
+
   return (
     <div>
       <SearchkitProvider searchkit={searchkit}>
@@ -234,21 +265,49 @@ const SearchKitView = ({ data }) => {
                   <ResetFilters />
                 </ActionBarRow>
               </ActionBar>
+
+              {/* <ViewSwitcherConfig */}
+              {/*   searchkit={this.searchkit} */}
+              {/*   hitComponents={[ */}
+              {/*     { key: 'grid', title: 'Grid', itemComponent: MovieHitsGridItem, defaultOption: true }, */}
+              {/*     { key: 'list', title: 'List', itemComponent: MovieHitsListItem }, */}
+              {/*     { key: 'custom-list', title: 'Custom List', listComponent: MovieList } */}
+              {/*   ]} */}
+              {/* /> */}
+              {/* <ViewSwitcherHits */}
+              {/*   searchkit={this.searchkit} */}
+              {/*   highlightFields={['title']} */}
+              {/*   hitsPerPage={12} */}
+              {/*   sourceFilter={['title']} */}
+              {/* /> */}
+              {/* <ViewSwitcherToggle searchkit={this.searchkit} translations={{ Grid: 'My Grid' }} /> */}
+
               <ViewSwitcherHits
                 hitsPerPage={12}
-                highlightFields={['title', 'plot']}
+                highlightFields={['title', 'description']}
                 sourceFilter={[]}
                 hitComponents={[
                   {
                     key: 'grid',
                     title: 'Grid',
-                    itemComponent: MovieHitsGridItem,
+                    itemComponent: decorateComponentWithProps(GenericGridItem, {
+                      data,
+                    }),
                     defaultOption: true,
                   },
                   {
                     key: 'list',
                     title: 'List',
-                    itemComponent: MovieHitsListItem,
+                    itemComponent: decorateComponentWithProps(GenericListItem, {
+                      data,
+                    }),
+                  },
+                  {
+                    key: 'table',
+                    title: <Icon name={tableSVG} size="18px" />,
+                    listComponent: decorateComponentWithProps(GenericTable, {
+                      data,
+                    }),
                   },
                 ]}
                 scrollTo="body"

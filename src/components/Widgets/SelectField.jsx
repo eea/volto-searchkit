@@ -9,10 +9,7 @@ import {
   customSelectStyles,
 } from '@plone/volto/components/manage/Widgets/SelectStyling';
 import { FormFieldWrapper } from '@plone/volto/components';
-import { getIndexes, getIndexDefinition } from '../../actions';
 import { FormContext } from '../Blocks/Form';
-
-// , find, isBoolean, isObject, intersection
 
 const Select = loadable(() => import('react-select'));
 
@@ -23,38 +20,23 @@ const messages = {
   },
 };
 
-const SelectIndex = (props) => {
-  console.log('props values', props);
-  const {
-    onEdit,
-    id,
-    choices,
-    value = {},
-    onChange,
-    es_indexes,
-    getIndexes,
-  } = props;
-  const { host } = value;
-
-  React.useEffect(() => {
-    if (host && !es_indexes.loading && !es_indexes.loaded) {
-      getIndexes(host);
-    }
-  }, [host, es_indexes, getIndexes]);
-  // const [was, setWas] = React.useState();
-  // React.useEffect(() => {
-  //   if (host && !was) {
-  //     setWas(true);
-  //     getIndexes(host);
-  //   }
-  // }, [host, es_indexes, getIndexes, was]);
-  console.log('indexName', value.indexName);
+const SelectField = (props) => {
+  // console.log('props values', props);
+  const { onEdit, id, value = null, onChange, es_indexes } = props;
 
   const { form } = React.useContext(FormContext);
-  console.log('form', form);
+
+  let choices = [];
+  if (form) {
+    const index =
+      es_indexes[form?.es_index?.host]?.items?.[form?.es_index?.indexName] ||
+      {};
+    const props = index.mappings?.resource?.properties || {};
+    choices = Object.keys(props).map((l) => [l, l]);
+  }
 
   return (
-    <FormFieldWrapper {...props} title="Index name" draggable={true}>
+    <FormFieldWrapper {...props} draggable={true}>
       <Select
         id={`field-${id}`}
         name={id}
@@ -77,33 +59,17 @@ const SelectIndex = (props) => {
         styles={customSelectStyles}
         theme={selectTheme}
         components={{ DropdownIndicator, Option }}
-        defaultValue={{ label: value.indexName, value: value.indexName }}
+        defaultValue={{ label: value, value: value }}
         onChange={(data) => {
-          return onChange(
-            id,
-            data.value === 'no-value'
-              ? { ...value, indexName: null }
-              : {
-                  ...value,
-                  indexName: data.value,
-                },
-          );
+          return onChange(id, data.value === 'no-value' ? null : data.value);
         }}
       />
     </FormFieldWrapper>
   );
 };
 
-export default connect(
-  (state, props) => {
-    const host = props.value?.host;
-    const es_indexes = state.es_server[host] || {};
-    const { items = [] } = es_indexes;
-    console.log('es_indexes', es_indexes);
-    return {
-      es_indexes,
-      choices: items.map((l) => [l, l]),
-    };
-  },
-  { getIndexes },
-)(SelectIndex);
+export default connect((state, props) => {
+  return {
+    es_indexes: state.es_server,
+  };
+}, {})(SelectField);

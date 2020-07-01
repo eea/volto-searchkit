@@ -1,4 +1,9 @@
-import { SearchKitView, SearchKitEdit, SelectIndexWidget } from './components';
+import {
+  SearchKitView,
+  SearchKitEdit,
+  SelectIndexWidget,
+  SelectFieldWidget,
+} from './components';
 import codeSVG from '@plone/volto/icons/code.svg';
 import { es_server } from './reducers';
 
@@ -21,6 +26,8 @@ export default function applyConfig(config) {
   };
 
   config.widgets.widget.elasticsearch_select_index = SelectIndexWidget;
+  config.widgets.widget.elasticsearch_select_field = SelectFieldWidget;
+
   config.settings.searchkit = {
     ...config.settings.searchkit,
     esProxyWhitelist: {

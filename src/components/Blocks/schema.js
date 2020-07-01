@@ -10,7 +10,7 @@ export const SearchkitBlockSchema = {
     {
       id: 'tile',
       title: 'Tile rendering',
-      fields: ['tile_title', 'tile_description', 'tile_image'],
+      fields: ['tile_title', 'tile_description', 'tile_url', 'tile_image'],
     },
   ],
 
@@ -28,9 +28,15 @@ export const SearchkitBlockSchema = {
     },
     tile_description: {
       title: 'Description field',
+      widget: 'elasticsearch_select_field',
+    },
+    tile_url: {
+      title: 'Primary URL field',
+      widget: 'elasticsearch_select_field',
     },
     tile_image: {
       title: 'Image field',
+      widget: 'elasticsearch_select_field',
     },
   },
 
