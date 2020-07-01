@@ -61,9 +61,11 @@ const GenericGridItem = (props) => {
         {/*     height="240" */}
         {/*   /> */}
         {/* )} */}
-        <div data-qa="title" className={bemBlocks.item('title')}>
-          {source[fieldTitle]}
-        </div>
+        <div
+          data-qa="title"
+          className={bemBlocks.item('title')}
+          dangerouslySetInnerHTML={{ __html: source[fieldTitle] }}
+        ></div>
       </a>
     </div>
   );
@@ -105,14 +107,19 @@ const GenericTable = (props) => {
   const fieldTitle = props.data?.tile_title || 'title';
   const fieldUrl = props.data?.tile_url || 'about';
   return (
-    <Table celled>
+    <Table celled striped>
       {(props.hits || []).map((item) => {
         const source = extend({}, item._source, item.highlight);
         // console.log('item', item);
         return (
           <tr>
             <td>
-              <a href={source[fieldUrl]}>{source[fieldTitle]}</a>
+              <a href={source[fieldUrl]}>
+                <span
+                  data-qa="title"
+                  dangerouslySetInnerHTML={{ __html: source[fieldTitle] }}
+                ></span>
+              </a>
             </td>
           </tr>
         );
@@ -149,22 +156,23 @@ const SearchKitView = ({ data }) => {
               {/*   title="Metascore" */}
               {/*   rangeFormatter={(count) => count + '*'} */}
               {/* /> */}
-              {/* <RangeFilter */}
-              {/*   min={0} */}
-              {/*   max={10} */}
-              {/*   field="imdbRating" */}
-              {/*   id="imdbRating" */}
-              {/*   title="IMDB Rating" */}
-              {/*   showHistogram={true} */}
-              {/* /> */}
-              {/* <InputFilter */}
-              {/*   id="writers" */}
-              {/*   searchThrottleTime={500} */}
-              {/*   title="Writers" */}
-              {/*   placeholder="Search writers" */}
-              {/*   searchOnChange={true} */}
-              {/*   queryFields={['writers']} */}
-              {/* /> */}
+
+              <RangeFilter
+                min={0}
+                max={10000}
+                field="issued"
+                id="issued"
+                title="Issued"
+                showHistogram={true}
+              />
+              <InputFilter
+                id="writers"
+                searchThrottleTime={500}
+                title="Type of data"
+                placeholder="Type of data"
+                searchOnChange={true}
+                queryFields={['typeOfData']}
+              />
 
               <MenuFilter
                 id="typeOfData"
