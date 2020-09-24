@@ -45,7 +45,10 @@ export default function applyConfig(config) {
     // TODO: develop this further to support multiple proxied ES
     const target = process.env.ELASTIC_URL || 'http://localhost:9200';
     const esProxyMiddleware = require('./server').default;
-    config.settings.expressMiddleware = [esProxyMiddleware(target)];
+    config.settings.expressMiddleware = [
+      ...(config.settings.expressMiddleware || []),
+      esProxyMiddleware(target),
+    ];
   }
 
   return config;
