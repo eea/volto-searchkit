@@ -1,8 +1,8 @@
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import { settings } from '~/config';
+import config from '@plone/volto/registry'
 
 function filterRequests(pathname, req) {
-  const whitelist = settings.searchkit.esProxyWhitelist;
+  const whitelist = config.settings.searchkit.esProxyWhitelist;
 
   const tomatch = whitelist[req.method] || [];
   return tomatch.filter((m) => pathname.match(m)).length > 0;
